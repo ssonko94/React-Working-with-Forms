@@ -12,13 +12,19 @@ const SimpleInput = (props) => {
   };
 
   const formSubmissionHandler = (event) => {
-    //getting the input value using state
     event.preventDefault();
+
+    if (enteredName.trim() === "") {
+      return;
+    }
+
+    //getting the input value using state
+
     console.log(enteredName);
 
     //getting the input value using refs
-    const enteredValue = nameInputRef.current.value;
-    console.log(enteredValue);
+    // const enteredValue = nameInputRef.current.value;
+    // console.log(enteredValue);
 
     //Clearing input using refs will always manipulate the real Dom
     // nameInputRef.current.value = "";
