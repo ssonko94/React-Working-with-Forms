@@ -7,6 +7,9 @@ const SimpleInput = (props) => {
   //getting the input value using state
   const [enteredName, setenteredName] = useState("");
 
+  //To add a more better user-experience we need to add another state
+  const [enteredNameIsValid, setEnteredNameIsValid] = useState(true);
+
   const nameInputChangeHandler = (event) => {
     setenteredName(event.target.value);
   };
@@ -15,11 +18,13 @@ const SimpleInput = (props) => {
     event.preventDefault();
 
     if (enteredName.trim() === "") {
+      setEnteredNameIsValid(false);
       return;
     }
 
-    //getting the input value using state
+    setEnteredNameIsValid(true);
 
+    //getting the input value using state
     console.log(enteredName);
 
     //getting the input value using refs
@@ -33,9 +38,13 @@ const SimpleInput = (props) => {
     setenteredName("");
   };
 
+  const nameInputClasses = enteredNameIsValid
+    ? "form-control"
+    : "form-control invalid";
+
   return (
     <form onSubmit={formSubmissionHandler}>
-      <div className="form-control">
+      <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
           ref={nameInputRef}
@@ -44,6 +53,9 @@ const SimpleInput = (props) => {
           value={enteredName}
           onChange={nameInputChangeHandler}
         />
+        {!enteredNameIsValid && (
+          <p className="error-text">Name must not be empty</p>
+        )}
       </div>
       <div className="form-actions">
         <button>Submit</button>
