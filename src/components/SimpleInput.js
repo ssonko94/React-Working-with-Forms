@@ -8,21 +8,17 @@ const SimpleInput = (props) => {
   const [enteredName, setenteredName] = useState("");
 
   //To add a more better user-experience we need to add another state
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameIsTouched, setEnteredNameIsTouched] = useState(false);
+
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInValid = !enteredNameIsValid && enteredNameIsTouched;
 
   const nameInputChangeHandler = (event) => {
     setenteredName(event.target.value);
-    if (event.target.value.trim() !== "") {
-      setEnteredNameIsValid(true);
-    }
   };
 
   const nameInputBlurHandler = (event) => {
     setEnteredNameIsTouched(true);
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
-    }
   };
 
   const formSubmissionHandler = (event) => {
@@ -30,12 +26,9 @@ const SimpleInput = (props) => {
 
     setEnteredNameIsTouched(true);
 
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
-
-    setEnteredNameIsValid(true);
 
     //getting the input value using state
     console.log(enteredName);
@@ -49,9 +42,9 @@ const SimpleInput = (props) => {
 
     //Clearing input using state is a more better solution
     setenteredName("");
+    setEnteredNameIsTouched(false);
   };
 
-  const nameInputIsInValid = !enteredNameIsValid && enteredNameIsTouched;
   const nameInputClasses = nameInputIsInValid
     ? "form-control invalid"
     : "form-control";
