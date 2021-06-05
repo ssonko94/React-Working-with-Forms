@@ -1,21 +1,22 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
 const SimpleInput = (props) => {
-  //getting the input value using refs
-  const nameInputRef = useRef();
-
-  //getting the input value using state
   const [enteredName, setenteredName] = useState("");
+  const [enteredEmail, setEnteredEmail] = useState("");
 
-  //To add a more better user-experience we need to add another state
   const [enteredNameIsTouched, setEnteredNameIsTouched] = useState(false);
+  const [enteredEmailIsTouched, setEnteredEmailIsTouched] = useState(false);
 
   const enteredNameIsValid = enteredName.trim() !== "";
   const nameInputIsInValid = !enteredNameIsValid && enteredNameIsTouched;
 
+  const enteredEmailIsValid =
+    enteredEmail.trim() !== "" && enteredEmail.toString().trim().includes("@");
+  const emailInputIsInValid = !enteredEmailIsValid && enteredEmailIsTouched;
+
   let formIsValid = false;
 
-  if (enteredNameIsValid) {
+  if (enteredNameIsValid && enteredEmailIsValid) {
     formIsValid = true;
   }
 
@@ -23,35 +24,41 @@ const SimpleInput = (props) => {
     setenteredName(event.target.value);
   };
 
+  const emailInputChangeHandler = (event) => {
+    setEnteredEmail(event.target.value);
+  };
+
   const nameInputBlurHandler = (event) => {
     setEnteredNameIsTouched(true);
+  };
+
+  const emailInputBlurHandler = (event) => {
+    setEnteredEmailIsTouched(true);
   };
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
     setEnteredNameIsTouched(true);
+    setEnteredNameIsTouched(true);
 
-    if (!enteredNameIsValid) {
+    if (!enteredNameIsValid && !enteredEmailIsValid) {
       return;
     }
 
-    //getting the input value using state
     console.log(enteredName);
+    console.log(enteredEmail);
 
-    //getting the input value using refs
-    // const enteredValue = nameInputRef.current.value;
-    // console.log(enteredValue);
-
-    //Clearing input using refs will always manipulate the real Dom
-    // nameInputRef.current.value = "";
-
-    //Clearing input using state is a more better solution
     setenteredName("");
+    setEnteredEmail("");
     setEnteredNameIsTouched(false);
+    setEnteredEmailIsTouched(false);
   };
 
   const nameInputClasses = nameInputIsInValid
+    ? "form-control invalid"
+    : "form-control";
+  const emailInputClasses = emailInputIsInValid
     ? "form-control invalid"
     : "form-control";
 
@@ -60,7 +67,6 @@ const SimpleInput = (props) => {
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
           value={enteredName}
@@ -70,6 +76,18 @@ const SimpleInput = (props) => {
         {nameInputIsInValid && (
           <p className="error-text">Name must not be empty</p>
         )}
+      </div>
+
+      <div className={emailInputClasses}>
+        <label htmlFor="email">E-Mail</label>
+        <input
+          type="email"
+          id="email"
+          value={enteredEmail}
+          onChange={emailInputChangeHandler}
+          onBlur={emailInputBlurHandler}
+        />
+        {emailInputIsInValid && <p className="error-text">Incorrect email</p>}
       </div>
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
